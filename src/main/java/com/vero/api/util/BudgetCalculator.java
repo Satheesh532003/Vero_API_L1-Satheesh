@@ -24,8 +24,23 @@ public final class BudgetCalculator {
      * @param topN         the maximum number of categories to return; must be greater than zero
      * @return a map of Category to total spend, sorted descending by spend, limited to topN entries
      */
-    public static Map<Category, BigDecimal> getTopSpendingCategories(List<Transaction> transactions, int topN) {
-        // TODO: implement
-        return new LinkedHashMap<>();
-    }
-}
+    public static Map<Category, BigDecimal> getTopSpendingCategories(
+        List<Transaction> transactions,
+        int topN) {
+
+        return transactions.stream()
+            .collect(java.util.stream.Collectors.groupingBy(
+                    Transaction::getCategory,
+                    java.util.stream.Collectors.reducing(
+                            BigDecimal.ZERO,
+                            Transaction::getAmount,
+                            BigDecimal::add)))
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.<Category, BigDecimal>comparingByValue().reversed())
+            .limit(topN)
+            .collect(
+                    LinkedHashMap::new,
+                    (m, e) -> m.put(e.getKey(), e.getValue()),
+                    LinkedHashMap::putAll
+            );
