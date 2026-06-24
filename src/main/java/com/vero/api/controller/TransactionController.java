@@ -3,7 +3,6 @@ package com.vero.api.controller;
 import com.vero.api.dto.TransactionRequest;
 import com.vero.api.dto.TransactionResponse;
 import com.vero.api.model.Category;
-import com.vero.api.model.Transaction;
 import com.vero.api.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,10 +60,13 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody TransactionRequest request) {
+    public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody TransactionRequest request) {
+
         Transaction created = service.createTransaction(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(TransactionResponse.fromTransaction(created));
     }
+    
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
