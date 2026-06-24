@@ -30,8 +30,30 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TransactionCandidateTest {
 
     @Test
-    void placeholder_removeThisWhenYouHaveRealTests() {
-        // Replace this test with tests that cover the behaviour you implemented.
-        assertTrue(true);
+    void topSpendingCategoriesShouldReturnHighestCategory() {
+
+        List<Transaction> transactions = List.of(
+                Transaction.builder()
+                        .category(Category.FOOD)
+                        .amount(new BigDecimal("100"))
+                        .transactionDate(LocalDate.now())
+                        .accountId(1L)
+                        .description("Food")
+                        .build(),
+
+                Transaction.builder()
+                        .category(Category.UTILITIES)
+                        .amount(new BigDecimal("300"))
+                        .transactionDate(LocalDate.now())
+                        .accountId(1L)
+                        .description("Bill")
+                        .build()
+        );
+
+        Map<Category, BigDecimal> result =
+                BudgetCalculator.getTopSpendingCategories(transactions, 1);
+
+        assertEquals(1, result.size());
+        assertEquals(new BigDecimal("300"), result.get(Category.UTILITIES));
     }
 }
