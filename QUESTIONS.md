@@ -13,7 +13,7 @@ what this annotation tells JPA, and describe what would happen to the database s
 you removed it. Why is it better to put `createdAt` and `updatedAt` in a shared abstract
 class rather than adding those fields directly to `Transaction` and `Account` separately?
 
-   @MappedSuperclass tells JPA to include the parent class fields in child entity tables. Without it, createdAt and updatedAt would not be mapped properly. Using a shared abstract class avoids duplicate code and keeps audit fields consistent across entities.
+     @MappedSuperclass tells JPA to include the parent class fields in child entity tables. Without it, createdAt and updatedAt would not be mapped properly. Using a shared abstract class avoids duplicate code and keeps audit fields consistent across entities.
 
 **2.** `TransactionService` is defined as a Java interface, with `TransactionServiceImpl`
 as its only implementation. A new engineer on the team asks: "Why bother with the interface
