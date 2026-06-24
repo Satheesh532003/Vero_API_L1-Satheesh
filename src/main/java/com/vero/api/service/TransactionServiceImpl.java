@@ -39,9 +39,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> getTransactionsByDateRange(LocalDate startDate, LocalDate endDate) {
-        // TODO: implement date range filtering
-        return Collections.emptyList();
-    }
+        return repository.findAll().stream()
+            .filter(t -> !t.getTransactionDate().isBefore(startDate)
+                    && !t.getTransactionDate().isAfter(endDate))
+            .toList();
+}
 
     @Override
     public Transaction createTransaction(TransactionRequest request) {
@@ -66,7 +68,7 @@ public class TransactionServiceImpl implements TransactionService {
         LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
 
         return repository.findAll().stream()
-                .filter(t -> t.getTransactionDate().isAfter(startOfMonth)
+                .filter(t -> !t.getTransactionDate().isBefore(startOfMonth)
                         && !t.getTransactionDate().isAfter(endOfMonth))
                 .collect(Collectors.groupingBy(
                         Transaction::getCategory,
